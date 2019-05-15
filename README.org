@@ -1,0 +1,9 @@
+
+
+Goto start.spring.io
+use springboot 2.2.0 (snapshot)
+group: com.exmple
+artifact: bk
+dependencies: kafka, h2, batch
+
+
