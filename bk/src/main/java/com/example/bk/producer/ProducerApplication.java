@@ -1,6 +1,7 @@
 package com.example.bk.producer;
 
 import com.example.bk.Customer;
+import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -13,6 +14,7 @@ import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.batch.item.kafka.KafkaItemWriter;
 import org.springframework.batch.item.kafka.builder.KafkaItemWriterBuilder;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -21,9 +23,10 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @EnableBatchProcessing
 @SpringBootApplication
+@RequiredArgsConstructor
 public class ProducerApplication {
     public static void main(String args[]) {
-        SpringBootApplication.run(ProducerApplication.class, args);
+        SpringApplication.run(ProducerApplication.class, args);
     }
 
     private final JobBuilderFactory jobBuilderFactory;
@@ -40,10 +43,10 @@ public class ProducerApplication {
     }
 
     @Bean
-    KafkaItemWriter<Long, Customer> kafkaItemWrite() {
+    KafkaItemWriter<Long, Customer> kafkaItemWriter() {
         return new KafkaItemWriterBuilder<>()
                 .kafkaTemplate(template)
-                .itemKeyMapper(Customer::getId)
+                .itemKeyMapper(customer -> ((Customer) customer).getId())
                 .build();
     }
     @Bean
